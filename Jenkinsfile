@@ -26,10 +26,17 @@ pipeline {
 
         stage('Deploy to S3') {
             steps {
-                sh '''
-                . venv/bin/activate
-                python3 deploy.py
-                '''
+                withCredentials([
+                    string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
+                    sh '''
+                    . venv/bin/activate
+                    export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                    export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                    python3 deploy.py
+                    '''
+                }
             }
         }
     }
