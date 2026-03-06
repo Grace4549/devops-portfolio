@@ -13,7 +13,6 @@ for file in files:
         bucket_name,
         file,
         ExtraArgs={
-            "ACL": "public-read",
             "ContentType": "text/html" if file.endswith(".html")
             else "text/css" if file.endswith(".css")
             else "application/javascript"
