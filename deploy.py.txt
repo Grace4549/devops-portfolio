@@ -1,22 +1,23 @@
 import boto3
 import os
 
-bucket_name = "my-professional-portfolio-2026"
+bucket_name = "grace-professional-portfolio-2026"
 
-s3 = boto3.client(
-'s3',
-aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
-aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY']
-)
+s3 = boto3.client("s3")
 
-files = ['index.html','style.css','script.js']
+files = ["index.html", "style.css", "script.js"]
 
 for file in files:
     s3.upload_file(
         file,
         bucket_name,
         file,
-        ExtraArgs={'ACL':'public-read'}
+        ExtraArgs={
+            "ACL": "public-read",
+            "ContentType": "text/html" if file.endswith(".html")
+            else "text/css" if file.endswith(".css")
+            else "application/javascript"
+        }
     )
 
 print("Website deployed successfully")
