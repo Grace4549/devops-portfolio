@@ -13,15 +13,23 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Setup Virtual Environment') {
             steps {
-                sh 'pip3 install boto3'
+                sh '''
+                python3 -m venv venv
+                source venv/bin/activate
+                pip install --upgrade pip
+                pip install boto3
+                '''
             }
         }
 
         stage('Deploy to S3') {
             steps {
-                sh 'python3 deploy.py'
+                sh '''
+                source venv/bin/activate
+                python3 deploy.py
+                '''
             }
         }
     }
